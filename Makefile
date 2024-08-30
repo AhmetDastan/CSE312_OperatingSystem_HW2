@@ -1,7 +1,7 @@
 All: compile clean
 
-compile: main.cpp
-	@g++ main.cpp -o exe -lm
+compile: main.cpp CdRom.cpp
+	@g++ main.cpp CdRom.cpp -o exe -lm
 
 run:
 	@./exe
