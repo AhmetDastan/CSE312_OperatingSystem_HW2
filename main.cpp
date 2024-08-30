@@ -9,9 +9,10 @@ int main() {
     cout << "Hello, World!" << endl; 
 
     int sizeOfBlock = 4;
-    string nameOfFile = "data.dat";
-    string rootOfCd = "/root";
+    string nameOfFile = "mySystem.dat";
+    string rootOfCd = "/ysa/start";
     CdRom fileSystem(sizeOfBlock, nameOfFile, rootOfCd);
+    
     cout << "ananas \n";
     return 0;
 }

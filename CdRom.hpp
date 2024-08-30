@@ -1,10 +1,13 @@
 #ifndef CDROM_H
 #define CDROM_H
 
+#include "FileManager.hpp"
 #include <iostream>
 #include <cstdint>
 #include <vector>
-
+#include <string>
+#include <filesystem>
+ 
 
 using namespace std;
 
@@ -45,20 +48,21 @@ struct SuperBlock{
 class CdRom
 {
 public:
-    CdRom(int sizeOfBlock, string nameOfFile, string rootOfCd);
-    ~CdRom();
-
-    void createCdRom();
-    void createFile(string fileName, string fileContent);
+    CdRom(int sizeOfBlock, string nameOfFile, string rootOfCd); 
+  
     
+    FileManager fileManager;
 
 private:
+    string nameOfFile, rootOfCd;
+    int sizeOfBlock;
     SuperBlock superBlock;
     DataBlocks dataBlocks;
 
     void initiliseSuperBlock(int sizeOfBlock);
     void initiliseDirectory(Directory *directory);
     void initiliseDirectoryEntry(DirectoryEntry *directoryEntry, string fileName, string fileContent);
+    void initiliseRootDirectory();
 };
 
 
