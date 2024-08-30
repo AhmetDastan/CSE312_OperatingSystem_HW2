@@ -25,20 +25,20 @@ void FileManager::initiliseFile(string fileName, unsigned int fileSize){
 void FileManager::write(const char* data, unsigned int size){ 
     ofstream file(fileName, std::ios::binary | std::ios::app); // Append mode
     if (file.is_open()) {
-        file.write(data, size); // convert binary formation
+        file.write(data, size); 
         file.close();
     }
 }
 
-int FileManager::read(char* data, unsigned int size){      // index include offset
+void FileManager::read(char* data, unsigned int size, streampos offset){      // index and offset, streampos about strict convertion of binary
     ifstream file(fileName, std::ios::binary);
-    
-    char value;
-    while (file.read(reinterpret_cast<char*>(&value), sizeof(value))) {
-        std::cout << "Read value: " << value << std::endl;
-    } 
-
-    file.close(); 
-    return value;
+     
+    if (!file) {
+        std::cerr << "Dosya açma hatası: " << fileName << std::endl;
+        return;
+    }
+    file.seekg(offset);
+    file.read(data, size);
+    file.close();
 }
 

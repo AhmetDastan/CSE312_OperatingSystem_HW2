@@ -13,7 +13,7 @@ public:
     FileManager(string fileName); // create a file with a name and file size
 
     void write(const char* data, unsigned int size);
-    int read(char* data, unsigned int size); 
+    void read(char* data, unsigned int size, streampos offset); 
 private:
     string fileName;
     int indexAmount;
