@@ -17,6 +17,7 @@ using namespace std;
 
 struct DataBlocks{
     vector<bool> dirtyData;
+    vector<string> dataName;
     int blockAmount; 
 };
  
@@ -32,9 +33,9 @@ struct DirectoryEntry{  // 1 + 1 + 8 + 8 + 14 + 2 + 1 + 15 = 50 bytes    -1 L =>
 
 struct Directory{
     vector<DirectoryEntry> entries;
-    Directory *parent;
-    Directory *current;
+    int amountOfEntries;
 };
+
  
 struct SuperBlock{
     uint16_t superBlockByteSize = 8; // 2 byte static 54 bytes
@@ -56,16 +57,19 @@ private:
     string nameOfFile, rootOfCd;
     int sizeOfBlock;
     SuperBlock superBlock;
-    DataBlocks dataBlocks;
-    Directory rootDirectory;
+    DataBlocks dataBlocks; 
     
-    void initiliseSuperBlock(int sizeOfBlock);
-    void initiliseDirectory(Directory *directory);
+    void initiliseSuperBlock(int sizeOfBlock); 
     void initiliseDirectoryEntry(DirectoryEntry *directoryEntry, string fileName, string fileContent);
     void initiliseRootDirectory();
 
+    void writeFolderToCd(string path);
+
     int howManyBlocksNeeded(unsigned int size);
     int nextProperPositionOfDataBlocks(int needOfBlock);
+     
+    // for testing function
+    void printDataBlocksDirtyDatas();
 };
 
 
