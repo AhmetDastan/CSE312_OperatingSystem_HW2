@@ -126,8 +126,35 @@ void CdRom::initiliseRootDirectory() {
 }
  
 
-void CdRom::initiliseDirectoryEntry(DirectoryEntry *directoryEntry, string fileName, string fileContent){ // 50 byte decrotry entry initilise
+void CdRom::initiliseDirectoryEntry(const filesystem::directory_entry& entry, DirectoryEntry &directoryEntry){ // 50 byte decrotry entry initilise
+    directoryEntry.dirEntryLength = 47;
+    directoryEntry.dirExtendSize = 0; 
+
+    // check dir flags to manage size or finding proper location
+    directoryEntry.flags[0] = entry.is_directory() ? 1 : 0;
+    directoryEntry.flags[1] = 0; // No extended attributes
+
+    if(directoryEntry.flags[0]){ // if directory 
+        directoryEntry.fileSize = 0;
+        directoryEntry.locationOfFile = nextProperPositionOfDataBlocks(1);
+    }else{ 
+        directoryEntry.fileSize = file_size(entry.path());
+        directoryEntry.locationOfFile = nextProperPositionOfDataBlocks(howManyBlocksNeeded(directoryEntry.fileSize / 8)); 
+    }
     
+    string fileName = entry.path().filename().string();
+    
+    time_t currentTime = std::time(nullptr);
+    time_t cftime = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+    directoryEntry.dateAndTime[14] = {};
+    strftime(directoryEntry.dateAndTime, sizeof(directoryEntry.dateAndTime), "%d%m%Y%H%M%S", localtime(&currentTime));
+    
+    directoryEntry.fileName[15] = {};
+    copy(fileName.begin(), fileName.end(), directoryEntry.fileName); 
+      
+    fileManager.write((char*)&directoryEntry, sizeof(directoryEntry));
+
+    dataBlocks.dataName[directoryEntry.locationOfFile] = directoryEntry.fileName; 
 }
 
 void CdRom::writeFolderToCd(string path){

@@ -60,7 +60,7 @@ private:
     DataBlocks dataBlocks; 
     
     void initiliseSuperBlock(int sizeOfBlock); 
-    void initiliseDirectoryEntry(DirectoryEntry *directoryEntry, string fileName, string fileContent);
+    void initiliseDirectoryEntry(const filesystem::directory_entry& entry, DirectoryEntry &directoryEntry);
     void initiliseRootDirectory();
 
     void writeFolderToCd(string path);
